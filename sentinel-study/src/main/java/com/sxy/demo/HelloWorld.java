@@ -26,6 +26,8 @@ public class HelloWorld {
         rule.setResource("helloworld");
         rule.setGrade(RuleConstant.FLOW_GRADE_QPS);
         rule.setCount(20);
+//        rule.setLimitApp()
+//        rule.setControlBehavior(RuleConstant.CONTROL_BEHAVIOR_WARM_UP);
         flowRules.add(rule);
         //规则管理器
         FlowRuleManager.loadRules(flowRules);

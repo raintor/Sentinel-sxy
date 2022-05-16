@@ -22,4 +22,9 @@ public class AnnoController {
     public String testBlock(){
         return annoService.block();
     }
+
+    @RequestMapping("/fallback")
+    public String testFallBack(){
+        return annoService.fallback();
+    }
 }

@@ -3,6 +3,7 @@ package com.sxy.annotation.service;
 import com.alibaba.csp.sentinel.EntryType;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.sxy.annotation.util.ExceptionUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AnnoServiceImpl implements AnnoService{
+
+    private static int count = 0;
 
     @Override
     @SentinelResource(
@@ -31,7 +34,23 @@ public class AnnoServiceImpl implements AnnoService{
     }
 
     @Override
+    @SentinelResource(
+            value = "com.sxy.annotation.service.AnnoService:fallback",
+            entryType = EntryType.OUT,
+            blockHandler = "fallbackBlockHandler",
+            blockHandlerClass = {ExceptionUtil.class},
+            fallback = "fallbackHandler"
+    )
     public String fallback() {
-        return null;
+        count++;
+        if (count % 4 == 0) {
+            throw new RuntimeException("抛出业务异常");
+        }
+        return "成功";
+    }
+
+    public String fallbackHandler(Throwable throwable) {
+        System.out.println("fallback exception --> error");
+        return "fallback";
     }
 }
